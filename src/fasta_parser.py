@@ -37,6 +37,7 @@ def parse_fasta(file_path):
         )
 
     sequences = []
+    seen_ids = set()
     current_id = None
     current_sequence = []
 
@@ -48,15 +49,34 @@ def parse_fasta(file_path):
                 continue
 
             if line.startswith(">"):
+                # Save the previous sequence
                 if current_id is not None:
                     sequence = validate_sequence(
                         "".join(current_sequence)
                     )
+
                     sequences.append(
                         DNASequence(current_id, sequence)
                     )
 
-                current_id = line[1:].split()[0]
+                # Read the new sequence ID
+                header = line[1:].strip()
+
+                if not header:
+                    raise ValueError(
+                        "Sequence ID cannot be empty"
+                    )
+
+                new_id = header.split()[0]
+
+                # Check for duplicate IDs
+                if new_id in seen_ids:
+                    raise ValueError(
+                        f"Duplicate sequence ID found: {new_id}"
+                    )
+
+                seen_ids.add(new_id)
+                current_id = new_id
                 current_sequence = []
 
             else:
@@ -65,10 +85,12 @@ def parse_fasta(file_path):
 
                 current_sequence.append(line)
 
+    # Save the last sequence
     if current_id is not None:
         sequence = validate_sequence(
             "".join(current_sequence)
         )
+
         sequences.append(
             DNASequence(current_id, sequence)
         )
