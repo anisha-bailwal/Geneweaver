@@ -102,6 +102,22 @@ class TestFastaParser(unittest.TestCase):
         finally:
            test_file.unlink(missing_ok=True)             
 
+    
+    def test_empty_sequence_before_next_header(self):
+        test_file = Path("tests/temp_empty_before_next.fasta")
+
+        test_file.write_text(
+            ">seq1\n>seq2\nATGC\n"
+        )
+
+        try:
+            with self.assertRaisesRegex(
+                ValueError, "DNA sequence cannot be empty"
+            ):
+                parse_fasta(test_file)
+
+        finally:
+            test_file.unlink(missing_ok=True)
 
 if __name__ == "__main__":
     unittest.main()
