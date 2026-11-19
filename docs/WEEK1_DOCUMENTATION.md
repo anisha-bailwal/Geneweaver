@@ -51,3 +51,29 @@ Needleman-Wunsch Global Alignment
 
 ### Objective
 Align two DNA sequences using a pure Python implementation.
+
+## 4. CPU Baseline Performance Benchmarking
+
+### Objective
+Measure the execution time of the Needleman-Wunsch DNA alignment algorithm using pure Python.
+
+### Implementation
+A benchmarking module was created using Python's `time.perf_counter()` function.
+
+DNA sequences of different lengths were generated and tested. Each test was executed five times to calculate the average execution time.
+
+### Benchmark Results
+
+| Sequence Size | Number of Runs | Average Execution Time | Alignment Score |
+|---|---:|---:|---:|
+| 100 | 5 | 0.003864 seconds | 200 |
+| 500 | 5 | 0.087983 seconds | 1000 |
+| 1000 | 5 | 0.439384 seconds | 2000 |
+
+### Observation
+Execution time increases as the DNA sequence length increases.
+
+The collected CPU benchmark results will serve as a baseline for future performance comparisons with GPU-based implementations.
+
+### Conclusion
+CPU baseline benchmarking was successfully completed for three different sequence sizes.
